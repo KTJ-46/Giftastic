@@ -4,39 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <title>Giphy Application</title>
 </head>
 <body>
+        
+        <h1>Animals</h1> <br>
 
-
-    <div id= "gif">
-
+    <div id= "gif-options" class="row">
     </div>
+    <div class = "row" class = "col-xs-3">
+          
+                    <form>
+                        Add a new animal:<br>
+                        <input type = "text" id = "new" >
+                        <button type = "button" id="submit"> Submit 
+                    </form>
+    </div>
+	<div id = "gif-container" class = "col-xs-8 ">
+    </div>
+			
+			
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
 
-        
+        var animal = "";
 
         var topics = ["cat", "dog", "lion", "giraffe", "horse", "rhino", "snake", "eagle", "ant", "ostrich", "tiger", "shark", "peacock", "hippo", "gorilla"];
 
+        function renderButtons() {
+        $("#gif-options").empty();
         for (i=0; i< topics.length; i++){ 
         
         var buttons = $('<button id= animalButton>'+ topics[i] + '</button>')
-
-        buttons.appendTo('#gif');
+        //buttons.attr("data-pet". (this).val());
+        
+        buttons.appendTo('#gif-options');
+        
         };
 
-         $("#animalButton").on('click', function(){
-            var animal = $(this).attr("name");
+    }
+
+        renderButtons();
 
 
 
-
-       
+        $("#animalButton").on('click', function(){
+            animal = $(this).name;
+       console.log(animal);
+        });
             
-        //var animal = "dog";
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&limit=10&api_key=teVlhFeNMTpfHxFr44of6X2kggITSmoP";
+        $("#submit").click(function () {
+         event.preventDefault();
+         newTopic = $("#new").val();
+	     topics.push(newTopic);
+	     console.log(topics);
+	    renderButtons();
+        
 
+        });
+        //var animal = "goat";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&limit=10&api_key=teVlhFeNMTpfHxFr44of6X2kggITSmoP";
+    
         
 
         $.ajax({
@@ -51,66 +80,25 @@
 
        for (var i = 0; i < results.length; i++) {
         if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
-
-
+            
         var gifDiv = $("<div>");
         var animalImage = $("<img>");
 
         var animalUrl = results[i].images.fixed_height.url;
         var p = $("<p>").text("Rating: " + results[i].rating);
 
-
+            // animalImage.attr("state", "still");
+			// animalImage.attr("still-data", element.images.fixed_height_still.url);
+			// animalImage.attr("animated-data", element.images.fixed_height.url);
 
         animalImage.attr("src", animalUrl);
         gifDiv.append(p);
 
         gifDiv.append(animalImage);
 
-        $("#gif").prepend(gifDiv);
+        $("#gif-container").prepend(gifDiv);
         };
     }});
-
-});
-
-
-        
-
-//         After data comes back from the request
-//         .then(function(response) {
-//           console.log(queryURL);
-
-//           console.log(response);
-//           // storing the data from the AJAX request in the results variable
-//           var results = response.data;
-
-//           // Looping through each result item
-//           for (var i = 0; i < results.length; i++) {
-
-
-//             // Creating and storing a div tag
-//             var animalDiv = $("<div>");
-
-//             // Creating a paragraph tag with the result item's rating
-//             var p = $("<p>").text("Rating: " + results[i].rating);
-
-//             // Creating and storing an image tag
-//             var animalImage = $("<img>");
-//             // Setting the src attribute of the image to a property pulled off the result item
-//             animalImage.attr("src", results[i].images.fixed_height.url);
-
-//             // Appending the paragraph and image tag to the animalDiv
-//             animalDiv.append(p);
-//             animalDiv.append(animalImage);
-
-//             // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
-//             $("#gifs-appear-here").prepend(animalDiv);
-//           }
-//         });
-//    });
-
-
-
-
 
 
     </script>
