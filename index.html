@@ -28,7 +28,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
 
-        var animal = "";
 
         var topics = ["cat", "dog", "lion", "giraffe", "horse", "rhino", "snake", "eagle", "ant", "ostrich", "tiger", "shark", "peacock", "hippo", "gorilla"];
 
@@ -36,44 +35,28 @@
         $("#gif-options").empty();
         for (i=0; i< topics.length; i++){ 
         
-        var buttons = $('<button id= animalButton>'+ topics[i] + '</button>')
-        //buttons.attr("data-pet". (this).val());
-        
+        var buttons = $('<button class= animalButton>'+ topics[i] + '</button>')
+        buttons.attr("data-animal", topics[i]);
+        //console.log(buttons.text());
         buttons.appendTo('#gif-options');
-        
+
         };
 
     }
 
         renderButtons();
+        attachEvent();
 
-
-
-        $("#animalButton").on('click', function(){
-            animal = $(this).name;
-       console.log(animal);
-        });
-            
-        $("#submit").click(function () {
-         event.preventDefault();
-         newTopic = $("#new").val();
-	     topics.push(newTopic);
-	     console.log(topics);
-	    renderButtons();
-        
-
-        });
-        //var animal = "goat";
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&limit=10&api_key=teVlhFeNMTpfHxFr44of6X2kggITSmoP";
+        function callGif(animal){
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&limit=10&api_key=teVlhFeNMTpfHxFr44of6X2kggITSmoP";
     
-        
-
-        $.ajax({
+            $.ajax({
             url: queryURL,
             method: "GET"
 
         })
         .then(function(response){
+            $("#gif-container").empty();
        console.log(response);
        console.log(queryURL);
        var results = response.data;
@@ -99,6 +82,34 @@
         $("#gif-container").prepend(gifDiv);
         };
     }});
+        };
+        
+        
+        function attachEvent(){
+
+        
+        $(".animalButton").on('click', function(){
+            animal = $(this).text();
+            console.log(animal);
+            callGif(animal);
+            
+
+        });
+    }    
+        $("#submit").click(function () {
+         event.preventDefault();
+         newTopic = $("#new").val();
+	     topics.push(newTopic);
+	     console.log(topics);
+	    renderButtons();
+        attachEvent();
+        });
+        
+        //var animal = "goat";
+        
+        
+
+   
 
 
     </script>
