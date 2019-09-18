@@ -52,12 +52,16 @@
                     if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
                         var gifDiv = $("<div>");
                         var animalImage = $("<img>");
-                        var animalUrl = results[i].images.fixed_height.url;
+                        var animalUrl = results[i].images.fixed_height_still.url;
+                        var animalGifUrl = results[i].images.fixed_height.url;
                         var p = $("<p>").text("Rating: " + results[i].rating);
-            // animalImage.attr("state", "still");
-			// animalImage.attr("still-data", element.images.fixed_height_still.url);
-			// animalImage.attr("animated-data", element.images.fixed_height.url);
+                        animalImage.attr("state", "static");
+                        animalImage.attr("still-data", animalUrl);
+                        animalImage.attr("animated-data", animalGifUrl);
                         animalImage.attr("src", animalUrl);
+                        animalImage.click(function(){
+                            toggle(this);
+                        });
                         gifDiv.append(p);
                         gifDiv.append(animalImage);
                         $("#gif-container").prepend(gifDiv);
@@ -65,7 +69,19 @@
             }});
         };
         
-        
+        function toggle(element){
+            if ($(element).attr("state") === "static") {
+                $(element).attr("state", "alive");
+                var urlAnimated = $(element).attr("animated-data");
+                $(element).attr("src", urlAnimated); 
+            }
+            else{
+                $(element).attr("state", "static");
+                var urlStill = $(element).attr("still-data");
+                $(element).attr("src", urlStill);
+            }
+        };
+
         function attachEvent(){
             $(".animalButton").on('click', function(){
                 animal = $(this).text();
